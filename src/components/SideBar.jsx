@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { applyFilter, removeFilter, setBrandFilter } from "../Redux/slices/mobile.slice";
 
 const buttonVariants = {
   hover: {
@@ -11,30 +13,26 @@ const buttonVariants = {
 };
 
 function SideBar() {
-  const [priceFilter, setPriceFilter] = useState(null);
-  const [brandFilter, setBrandFilter] = useState(null);
-  const [appliedFilters, setAppliedFilters] = useState([]);
-  console.log(appliedFilters);
-  console.log(priceFilter);
-  console.log(brandFilter);
+  const processors =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
+    return e.processor
+  }))]
+  const companyName =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
+    return e.name.split(" ")[0];
+  }))]
+  console.log(processors);
 
-  const applyFilter = (filterType, filterValue) => {
-    setAppliedFilters([
-      ...appliedFilters,
-      { type: filterType, value: filterValue },
-    ]);
-    if (filterType === "price") setPriceFilter(filterValue);
-    if (filterType === "brand") setBrandFilter(filterValue);
+  console.log(companyName)
+
+  const dispatch = useDispatch();
+  const {priceFilter , brandFilter  ,appliedFilters} = useSelector(state => state.mobile);
+  
+  console.log(priceFilter , brandFilter , appliedFilters)
+  const handleapplyFilter = (filterType, filterValue) => {
+    dispatch(applyFilter({ type: filterType, value: filterValue }));
   };
 
-  const removeFilter = (filterType, filterValue) => {
-    setAppliedFilters(
-      appliedFilters.filter(
-        (filter) => filter.type !== filterType || filter.value !== filterValue
-      )
-    );
-    if (filterType === "price") setPriceFilter(null);
-    if (filterType === "brand") setBrandFilter(null);
+  const handleremoveFilter = (filterType, filterValue) => {
+    dispatch(removeFilter({ type: filterType, value: filterValue }));
   };
 
   // useEffect(() => {
@@ -57,13 +55,13 @@ function SideBar() {
       <div className="flex flex-wrap justify-center gap-2 mb-4">
         {appliedFilters.map((filter) => (
           <div
-            className="bg-blue-500 text-white p-2 rounded-md"
-            key={`${filter.type}-${filter.value}`}
+            className="bg-blue-500 text-white px-2 py-1 rounded-md"
+            key={`${filter.type.type}-${filter.type.value}`}
           >
-            {filter.value}
+            {filter.type.value}
             <button
               className="ml-2 text-sm"
-              onClick={() => removeFilter(filter.type, filter.value)}
+              onClick={() => handleremoveFilter(filter.type.type, filter.type.value)}
             >
               X
             </button>
@@ -75,22 +73,21 @@ function SideBar() {
         <div className="flex flex-wrap items-center justify-center gap-2">
           {["< 5000", "5000-10000", "10000-15000", "> 15000"].map(
             (price, idx) => (
-              <motion.div
-                className="bg-white p-2 text-xs rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
+              <motion.button
+              className="bg-white p-[3px] text-[12px] rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
+
                 variants={buttonVariants}
                 whileHover="hover"
                 key={price}
+                disabled={priceFilter}
+                onClick={() => {
+                  handleapplyFilter({type:"price" , value : price})
+                }}
               >
-                <button
-                  disabled={priceFilter}
-                  onClick={() => {
-                    setPriceFilter(price);
-                    applyFilter("price", price);
-                  }}
-                >
+                
                   {price}
-                </button>
-              </motion.div>
+       
+              </motion.button>
             )
           )}
         </div>
@@ -100,28 +97,49 @@ function SideBar() {
       <div className="flex flex-col items-center w-full px-4">
         <h1 className="font-bold text-lg mb-2">Brand</h1>
         <div className="flex flex-wrap items-center justify-center gap-2">
-          {["Apple", "Samsung", "MI", "Realme", "OPPO"].map((name) => (
+          {companyName.map((name) => (
             <motion.button
-              className="bg-white p-2 text-xs rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
+            className="bg-white p-[3px] text-[12px] rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
+
               variants={buttonVariants}
               whileHover="hover"
               key={name}
+              disabled={brandFilter}
+              onClick={() => {
+                dispatch(setBrandFilter(name));
+                handleapplyFilter({type: "brand" , value: name})
+              }}
             >
-              <button
-                disabled={brandFilter}
-                onClick={() => {
-                  setBrandFilter(name);
-                  applyFilter("brand", name);
-                }}
-              >
+             
                 {name}
-              </button>
+
             </motion.button>
           ))}
         </div>
       </div>
 
       <hr className="w-full" />
+      <div className="flex flex-col items-center w-full px-4">
+        <h1 className="font-bold text-lg mb-2">Processor</h1>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {processors.map((name) => (
+            <motion.button
+              className="bg-white p-[3px] text-[12px] rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
+              variants={buttonVariants}
+              whileHover="hover"
+              key={name}
+              disabled={brandFilter}
+              onClick={() => {
+                dispatch(setBrandFilter(name));
+                handleapplyFilter({type: "brand" , value: name})
+              }}
+            >
+              {name}
+
+            </motion.button>
+          ))}
+        </div>
+      </div>
     </motion.div>
   );
 }
