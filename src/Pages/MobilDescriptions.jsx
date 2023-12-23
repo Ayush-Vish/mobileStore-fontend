@@ -17,7 +17,6 @@ function MobileDescriptions() {
   };
   const handlAddToCart = async ( ) => {
     const response =await dispatch(addToCart({id}));
-    console.log(response);
     if(response.payload.status) {
       navigate("/cart")
     }

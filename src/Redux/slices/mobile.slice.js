@@ -17,18 +17,23 @@ const initialState = {
   memoryFilter: null,
   appliedFilters: [],
   filteredMobiles: [],
+  pending : false,
 };
 
 export const searchMobiles = createAsyncThunk(
   "mobile/searchMobiles",
   async (value) => {
     try {
-      console.log(value);
 
-      const res = await axiosInstance.get(`/search?search=${value}&`);
+      const res =  axiosInstance.get(`/search?search=${value}&`);
+      toast.promise(res, {
+        loading: "Loading",
+        success: "Mobiles Loaded",
+        error: "Something went wrong",
+      });
       return (await res).data;
     } catch (error) {
-      console.log(error.message);
+        toast.error(error.message);
     }
   }
 );
@@ -44,10 +49,8 @@ export const getMobiles = createAsyncThunk(
       if (memory) queryParams += `memory=${memory}&`;
       if (OS) queryParams += `OS=${OS}&`;
       if (price) queryParams += `price=${price}&`;
-      console.log(queryParams);
 
       const res = axiosInstance.get(`/api/mobiles?${queryParams}`);
-      console.log("wjdbfawjdbfhjksdb");
       toast.promise(res, {
         loading: "Loading",
         success: "Mobiles Loaded",
@@ -55,7 +58,6 @@ export const getMobiles = createAsyncThunk(
       });
       return (await res).data;
     } catch (error) {
-      console.log(error);
       toast.error("Something ", error.message);
     }
   }
@@ -144,7 +146,6 @@ const mobileSlice = createSlice({
       state.isMenuOpen = !state.isMenuOpen;
     },
     applyFilter: (state, action) => {
-      console.log(action);
 
       state.appliedFilters.push(action.payload);
       if (action.payload.type.type === "price")
@@ -158,11 +159,8 @@ const mobileSlice = createSlice({
       if (action.payload.type.type === "memory")
         state.memoryFilter = action.payload.type.value;
 
-      console.log(state);
     },
     removeFilter: (state, action) => {
-      console.log(action);
-      console.log(state.appliedFilters);
       state.appliedFilters = state.appliedFilters.filter(
         (filter) =>
           filter.type.type !== action.payload.type ||
@@ -178,31 +176,41 @@ const mobileSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getAllMobiles.fulfilled, (state, action) => {
-        console.log(action);
+        console.log(action)
+        state.mobiles = action?.payload?.data?.mobiles;
+        state.pending = false;
 
-        state.mobiles = action.payload.data.mobiles;
       })
+      .addCase(getAllMobiles.pending, (state, action) => {
+        console.log(action)
+
+        state.pending = true;
+      } )
+      .addCase(getAllMobiles.rejected, (state, action) => {
+        console.log(action)
+
+        state.pending = true;
+        })
+
       .addCase(getMobiles.fulfilled, (state, action) => {
         state.filteredMobiles = action.payload.data.mobiles;
+        state.pending = false;
       })
       .addCase(searchMobiles.fulfilled, (state, action) => {
-        console.log(action);
         state.filteredMobiles = action.payload.data.mobiles;
+        
       })
+      
       .addCase(addToCart.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.cart = action?.payload?.data.cart;
       })
       .addCase(getCarts.fulfilled, (state, action) => {
-        console.log(action);
-        state.cart = action.payload.data.cart;
+        state.cart = action?.payload.data.cart;
       })
       .addCase(removeFromCart.fulfilled, (state, action) => {
-        console.log(action);
         state.cart = action.payload.data.cart;
       })
         .addCase(getCart.fulfilled, (state, action) => {
-            console.log(action);
             state.cart = action.payload.data.cart;
         });
 

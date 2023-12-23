@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { applyFilter, getMobiles, removeFilter  } from "../Redux/slices/mobile.slice";
+import Loader from "./Loader";
 
 const buttonVariants = {
   hover: {
@@ -13,27 +14,27 @@ const buttonVariants = {
 };
 
 function SideBar() {
-  console.log(useSelector(state=> state.mobile.mobiles))
-  const processors =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
-    return e.processor
-  }))]
-  const companyName =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
-    return e.name.split(" ")[0];
-  }))]
-  const Os =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
-    return e.OS;
-  }))]
-  const memoryTypes = [...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
-    return e.memory;
-  }))]
-  console.log(Os);
+  const mobiles = useSelector(state => state?.mobile?.mobiles);
 
-  console.log(companyName)
+const processors = mobiles 
+  ? [...new Set(mobiles.map((e) => e.processor))]
+  : [];
+
+const companyName = mobiles 
+  ? [...new Set(mobiles.map((e) => e.name.split(" ")[0]))]
+  : [];
+
+const Os = mobiles 
+  ? [...new Set(mobiles.map((e) => e.OS))]
+  : [];
+
+const memoryTypes = mobiles 
+  ? [...new Set(mobiles.map((e) => e.memory))]
+  : [];
 
   const dispatch = useDispatch();
-  const {priceFilter , brandFilter  ,appliedFilters , processorFilter , oSFilter  , memoryFilter} = useSelector(state => state.mobile);
+  const {priceFilter , brandFilter , pending  ,appliedFilters , processorFilter , oSFilter  , memoryFilter} = useSelector(state => state.mobile);
   
-  console.log(priceFilter , brandFilter , appliedFilters , oSFilter)
   const handleapplyFilter = (filterType, filterValue) => {
     dispatch(applyFilter({ type: filterType, value: filterValue }));
   };
@@ -55,7 +56,13 @@ function SideBar() {
     fetchData();
   }, [priceFilter, brandFilter, processorFilter, oSFilter,memoryFilter,  fetchData]);
 
+  if(pending) {
+    return  <Loader part1={true} />
+
+  }
+
   return (
+    
     <motion.div
       className="bg-yellow-50  max-w-[210px] sm:flex flex-col items-center gap-3 rounded-lg shadow-lg h-full py-4 "
       initial={{ opacity: 0, scale: 0.9 }}

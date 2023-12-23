@@ -10,22 +10,21 @@ import Loader from '../components/Loader';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const {isMenuOpen , mobiles} = useSelector(state => state.mobile);
-  console.log(isMenuOpen);
-  console.log(mobiles);
+  const {isMenuOpen , pending} = useSelector(state => state.mobile);
 
   const variants = {
     open: { rotate: 90 },
     closed: { rotate: 0 },
   };
+  console.log(pending);
 
   return (
     <main className='max-w-[65rem] m-auto flex flex-col gap-2 shadow-xl  bg-gray-100'>
       <Header/>
     
-        {
-          mobiles ? 
-                    <div className='flex justify-between gap-3 relative'>
+       
+          
+                    <div className='flex justify-between gap-3   relative'>
                     <div className='h-fit relative'>
                       <div className='flex sm:hidden absolute top-0 left-2 z-10'>
                         <motion.div animate={isMenuOpen ? "open" : "closed"} variants={variants}>
@@ -43,9 +42,7 @@ const HomePage = () => {
                     </div>
                     <MobileGallery/>
                   </div>
-                  : 
-                    <Loader/>
-        }
+    
     </main>
   );
 };

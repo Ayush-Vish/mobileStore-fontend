@@ -2,11 +2,12 @@ import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllMobiles, getMobiles } from '../Redux/slices/mobile.slice';
 import MobileCard from './MobileCard';
+import Loader from './Loader';
 
 function MobileGallery() {
   const dispatch = useDispatch()
-  const mobileData= useSelector(state => state.mobile);
-
+  const {filteredMobiles , pending , mobiles}= useSelector(state => state.mobile);
+console.log(pending);
 
   const getMobilesData =async () => {
 
@@ -17,10 +18,19 @@ function MobileGallery() {
     getMobilesData();
     
   }, [])
+
+  if(pending) {
+    return (
+      <div className='flex flex-col h-full  bg-white p-1 w-[100%] justify-center items-center '>
+        
+         <Loader part1={false} part2={true} />
+      </div>
+    )
+  }
   return (
     <section className='flex flex-col flex-wrap bg-white p-1 w-full  '>
       {
-        ( mobileData.filteredMobiles ? mobileData.filteredMobiles :  mobileData.mobiles).map((e , idx ) => (
+        ( filteredMobiles ? filteredMobiles :  mobiles).map((e , idx ) => (
 
           <MobileCard id={e._id} key={idx} name={e.name} type={e.type} OS={e.OS} processor={e.processor} memory={e.memory} price={e.price} image={e.image}  />
         ) )
