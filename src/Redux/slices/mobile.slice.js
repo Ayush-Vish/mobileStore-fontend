@@ -13,13 +13,25 @@ const initialState = {
     isMenuOpen : false,
     priceFilter : null, 
     brandFilter : null , 
+    processorFilter : null, 
+    oSFilter : null, 
     appliedFilters : [], 
-    
+    filteredMobiles : []
+
 }
 
-export const getMobiles = createAsyncThunk("mobile/getMobiles", async () => {
+export const getMobiles = createAsyncThunk("mobile/getMobiles", async ( { name, type, processor, memory, OS, price}) => {
     try {
-        const res=  axiosInstance.get("/api/mobiles");
+        let queryParams= "";
+        if(name) queryParams += `name=${name}&`;
+        if(type) queryParams += `type=${type}&`;
+        if(processor) queryParams += `processor=${processor}&`;
+        if(memory) queryParams += `memory=${memory}&`;
+        if(OS) queryParams += `OS=${OS}&`;
+        if(price) queryParams += `price=${price}&`;
+        console.log(queryParams)
+
+        const res=  axiosInstance.get(`/api/mobiles?${queryParams}`);
         console.log("wjdbfawjdbfhjksdb")
         toast.promise(res  , {
             loading : "Loading",
@@ -34,6 +46,20 @@ export const getMobiles = createAsyncThunk("mobile/getMobiles", async () => {
     }
 })
 
+
+export const getAllMobiles = createAsyncThunk("mobile/getAllMobiles", async ( ) => {
+    try {
+      
+
+        const res=  axiosInstance.get(`/api/mobiles`);
+
+        
+        return (await res).data
+    } catch (error) {
+
+        toast.error("Something " , error.message )
+    }
+})
 const mobileSlice = createSlice({
     name : "mobile",
     initialState,
@@ -47,6 +73,10 @@ const mobileSlice = createSlice({
             state.appliedFilters.push(action.payload);
             if (action.payload.type.type === "price") state.priceFilter = action.payload.type.value;
             if (action.payload.type.type === "brand") state.brandFilter = action.payload.type.value;
+            if (action.payload.type.type === "processor") state.processorFilter = action.payload.type.value;
+            if (action.payload.type.type === "os") state.oSFilter = action.payload.type.value;
+
+
             console.log(state)
           },
         removeFilter: (state, action) => {
@@ -57,29 +87,34 @@ const mobileSlice = createSlice({
             );
             if (action.payload.type === "price") state.priceFilter = null;
             if (action.payload.type === "brand") state.brandFilter = null;
+            if (action.payload.type === "processor") state.processorFilter = null;
+            if (action.payload.type === "os") state.oSFilter = null;
+
+
         }, 
-        setPriceFilter: (state, action) => {
-            state.priceFilter = action.payload;
-        },
-        setBrandFilter: (state, action) => {
-            state.brandFilter = action.payload;
-        },
+  
     }, 
     extraReducers : (builder ) => {
 
 
         builder.addCase(
-            getMobiles.fulfilled, (state, action) => {
+            getAllMobiles.fulfilled, (state, action) => {
                 state.mobiles = action.payload.data.mobiles;
 
             }
+
         )
+        .addCase(getMobiles.fulfilled , (state , action ) => { 
+            state.filteredMobiles=action.payload.data.mobiles;
+        })
      
 
     }
 })
 
-export const {toggleMenu , applyFilter , removeFilter , setBrandFilter  , setPriceFilter} = mobileSlice.actions;
+
+
+export const {toggleMenu , applyFilter , removeFilter } = mobileSlice.actions;
 
 
 export default mobileSlice.reducer;

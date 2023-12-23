@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMobiles } from '../Redux/slices/mobile.slice';
+import { getAllMobiles, getMobiles } from '../Redux/slices/mobile.slice';
 import MobileCard from './MobileCard';
 
 function MobileGallery() {
@@ -10,7 +10,7 @@ function MobileGallery() {
 
   const getMobilesData =async () => {
 
-    const response = await dispatch(getMobiles()); 
+    const response = await dispatch(getAllMobiles()); 
     
   }
   useEffect(()=>{
@@ -20,9 +20,9 @@ function MobileGallery() {
   return (
     <section className='flex flex-col flex-wrap bg-white p-1 w-full  '>
       {
-        mobileData.mobiles.map((e , idx ) => (
+        ( mobileData.filteredMobiles ? mobileData.filteredMobiles :mobileData.mobiles).map((e , idx ) => (
 
-          <MobileCard key={idx} name={e.name} type={e.type} processor={e.processor} memory={e.memory} price={e.price} image={e.image}  />
+          <MobileCard key={idx} name={e.name} type={e.type} OS={e.OS} processor={e.processor} memory={e.memory} price={e.price} image={e.image}  />
         ) )
       }
     </section>

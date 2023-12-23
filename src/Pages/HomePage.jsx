@@ -20,29 +20,29 @@ const HomePage = () => {
   };
 
   return (
-    <main className='max-w-[65rem] m-auto flex flex-col gap-2'>
+    <main className='max-w-[65rem] m-auto flex flex-col gap-2 shadow-xl  bg-gray-100'>
       <Header/>
     
         {
           mobiles ? 
-                      <div className='flex justify-between gap-3 relative'>
-                      <div className='h-fit relative'>
-                        <div className='flex sm:hidden absolute top-0 left-2 z-10'>
-                          <motion.div animate={isMenuOpen ? "open" : "closed"} variants={variants}>
-                            <CiMenuBurger onClick={()=> dispatch(toggleMenu(!isMenuOpen))} scale={10} size={20} />
-                          </motion.div>
-                        </div>
-                        {isMenuOpen && (
-                          <div className='sm:hidden z-10 absolute top-8 '>
-                            <SideBar />
-                          </div>
-                        )}
-                        <div className='hidden sm:flex w-[200px]'>
+                    <div className='flex justify-between gap-3 relative'>
+                    <div className='h-fit relative'>
+                      <div className='flex sm:hidden absolute top-0 left-2 z-10'>
+                        <motion.div animate={isMenuOpen ? "open" : "closed"} variants={variants}>
+                          <CiMenuBurger onClick={()=> dispatch(toggleMenu(!isMenuOpen))} scale={10} size={20} />
+                        </motion.div>
+                      </div>
+                      {isMenuOpen && (
+                        <div className='sm:hidden z-10 absolute top-8 '>
                           <SideBar />
                         </div>
+                      )}
+                      <div className='hidden sm:flex w-[200px]'>
+                        <SideBar />
                       </div>
-                      <MobileGallery/>
                     </div>
+                    <MobileGallery/>
+                  </div>
                   : 
                     <Loader/>
         }

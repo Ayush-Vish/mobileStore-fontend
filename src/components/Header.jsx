@@ -24,11 +24,7 @@ const Header = () => {
                 <div>
                     Phones
                 </div>
-                <div>
-                    <button className='bg-blue-500 px-2 rounded-md '>
-                        Signup
-                    </button>
-                </div>
+                
                 <div className='text-2xl'>
                     <CiShoppingCart/>   
                 </div>

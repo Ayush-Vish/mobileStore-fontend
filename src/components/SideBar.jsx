@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { applyFilter, removeFilter, setBrandFilter } from "../Redux/slices/mobile.slice";
+import { applyFilter, getMobiles, removeFilter  } from "../Redux/slices/mobile.slice";
 
 const buttonVariants = {
   hover: {
@@ -13,20 +13,24 @@ const buttonVariants = {
 };
 
 function SideBar() {
+  console.log(useSelector(state=> state.mobile.mobiles))
   const processors =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
     return e.processor
   }))]
   const companyName =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
     return e.name.split(" ")[0];
   }))]
-  console.log(processors);
+  const Os =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
+    return e.OS;
+  }))]
+  console.log(Os);
 
   console.log(companyName)
 
   const dispatch = useDispatch();
-  const {priceFilter , brandFilter  ,appliedFilters} = useSelector(state => state.mobile);
+  const {priceFilter , brandFilter  ,appliedFilters , processorFilter , oSFilter} = useSelector(state => state.mobile);
   
-  console.log(priceFilter , brandFilter , appliedFilters)
+  console.log(priceFilter , brandFilter , appliedFilters , oSFilter)
   const handleapplyFilter = (filterType, filterValue) => {
     dispatch(applyFilter({ type: filterType, value: filterValue }));
   };
@@ -35,15 +39,18 @@ function SideBar() {
     dispatch(removeFilter({ type: filterType, value: filterValue }));
   };
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const response = await fetch(`https://api.example.com/products?price=${priceFilter}&brand=${brandFilter}`);
-  //     const data = await response.json();
-  //     console.log(data);
-  //   }
+  
+  const fetchData = useCallback(
+    async ( )=> {
+      await dispatch(getMobiles({price: priceFilter , name: brandFilter , processor: processorFilter , OS : oSFilter})) 
 
-  //   fetchData();
-  // }, [priceFilter, brandFilter]);
+    } , [brandFilter, dispatch, priceFilter, processorFilter , oSFilter]
+  )
+
+  useEffect(() => {
+
+    fetchData();
+  }, [priceFilter, brandFilter, processorFilter, oSFilter, fetchData]);
 
   return (
     <motion.div
@@ -69,9 +76,9 @@ function SideBar() {
         ))}
       </div>
       <div className="flex flex-col items-center w-full px-4">
-        <h1 className="font-bold text-lg mb-2">Price</h1>
+        <h1 className="font-bold text-lg mb-2">Price (&#36;) </h1>
         <div className="flex flex-wrap items-center justify-center gap-2">
-          {["< 5000", "5000-10000", "10000-15000", "> 15000"].map(
+          {["0-300", "300-500", "500-700", "700-1000", "1000-1500"].map(
             (price, idx) => (
               <motion.button
               className="bg-white p-[3px] text-[12px] rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
@@ -106,7 +113,7 @@ function SideBar() {
               key={name}
               disabled={brandFilter}
               onClick={() => {
-                dispatch(setBrandFilter(name));
+
                 handleapplyFilter({type: "brand" , value: name})
               }}
             >
@@ -128,10 +135,32 @@ function SideBar() {
               variants={buttonVariants}
               whileHover="hover"
               key={name}
-              disabled={brandFilter}
+              disabled={processorFilter}
               onClick={() => {
-                dispatch(setBrandFilter(name));
-                handleapplyFilter({type: "brand" , value: name})
+
+                handleapplyFilter({type: "processor" , value: name})
+              }}
+            >
+              {name}
+
+            </motion.button>
+          ))}
+        </div>
+      </div>
+      <hr className="w-full" />
+      <div className="flex flex-col items-center w-full px-4">
+        <h1 className="font-bold text-lg mb-2">Operating System</h1>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {Os.map((name) => (
+            <motion.button
+              className="bg-white p-[3px] text-[12px] rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
+              variants={buttonVariants}
+              whileHover="hover"
+              key={name}
+              disabled={oSFilter}
+              onClick={() => {
+
+                handleapplyFilter({type: "os" , value: name})
               }}
             >
               {name}

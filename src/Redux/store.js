@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import mobileSlicereducer from "./slices/mobile.slice";
-const store = configureStore({
+const store = configureStore({  
     reducer  :{
         mobile : mobileSlicereducer, 
        

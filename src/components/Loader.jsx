@@ -19,8 +19,6 @@ const Loader = () => {
       }
     }
   };
-  console.log("dksnbjksndfffffffffffffffffffffff")
-
   return (
     <div className="flex justify-center items-center h-screen">
       Loading ... 
