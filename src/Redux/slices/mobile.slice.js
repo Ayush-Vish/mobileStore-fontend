@@ -22,7 +22,9 @@ const initialState = {
 
 export const searchMobiles = createAsyncThunk("mobile/searchMobiles",async ( value) => {
     try {
-        const res = await axiosInstance.get(`/api/mobiles/search?search=${value}`);
+        console.log(value);
+
+        const res = await axiosInstance.get(`/search?search=${value}&`);
         return (await res).data;
 
     } catch (error) {
@@ -122,7 +124,7 @@ const mobileSlice = createSlice({
         })
         .addCase(searchMobiles.fulfilled , (state , action ) => {
             console.log(action);
-            state.filteredMobiles=action.payload;
+            state.filteredMobiles=action.payload.data.mobiles;
         })
      
 

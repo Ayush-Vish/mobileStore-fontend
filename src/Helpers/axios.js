@@ -2,7 +2,7 @@ import axios  from "axios";
 
 const axiosInstance = axios.create();
 
-axiosInstance.defaults.baseURL = "http://localhost:3000";
+axiosInstance.defaults.baseURL = import.meta.env.VITE_API_BACKEND_URL ;
 
 axiosInstance.defaults.withCredentials = true 
 

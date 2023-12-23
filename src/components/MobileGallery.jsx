@@ -20,7 +20,7 @@ function MobileGallery() {
   return (
     <section className='flex flex-col flex-wrap bg-white p-1 w-full  '>
       {
-        ( mobileData.filteredMobiles ? mobileData.filteredMobiles :mobileData.mobiles).map((e , idx ) => (
+        ( mobileData.filteredMobiles ? mobileData.filteredMobiles :  mobileData.mobiles).map((e , idx ) => (
 
           <MobileCard id={e._id} key={idx} name={e.name} type={e.type} OS={e.OS} processor={e.processor} memory={e.memory} price={e.price} image={e.image}  />
         ) )
