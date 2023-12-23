@@ -23,12 +23,15 @@ function SideBar() {
   const Os =[...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
     return e.OS;
   }))]
+  const memoryTypes = [...new Set(useSelector(state => state.mobile.mobiles).map((e) => {
+    return e.memory;
+  }))]
   console.log(Os);
 
   console.log(companyName)
 
   const dispatch = useDispatch();
-  const {priceFilter , brandFilter  ,appliedFilters , processorFilter , oSFilter} = useSelector(state => state.mobile);
+  const {priceFilter , brandFilter  ,appliedFilters , processorFilter , oSFilter  , memoryFilter} = useSelector(state => state.mobile);
   
   console.log(priceFilter , brandFilter , appliedFilters , oSFilter)
   const handleapplyFilter = (filterType, filterValue) => {
@@ -44,13 +47,13 @@ function SideBar() {
     async ( )=> {
       await dispatch(getMobiles({price: priceFilter , name: brandFilter , processor: processorFilter , OS : oSFilter})) 
 
-    } , [brandFilter, dispatch, priceFilter, processorFilter , oSFilter]
+    } , [brandFilter, dispatch, priceFilter, processorFilter, oSFilter]
   )
 
   useEffect(() => {
 
     fetchData();
-  }, [priceFilter, brandFilter, processorFilter, oSFilter, fetchData]);
+  }, [priceFilter, brandFilter, processorFilter, oSFilter,memoryFilter,  fetchData]);
 
   return (
     <motion.div
@@ -161,6 +164,28 @@ function SideBar() {
               onClick={() => {
 
                 handleapplyFilter({type: "os" , value: name})
+              }}
+            >
+              {name}
+
+            </motion.button>
+          ))}
+        </div>
+      </div>
+      <hr className="w-full" />
+      <div className="flex flex-col items-center w-full px-4">
+        <h1 className="font-bold text-lg mb-2">Operating System</h1>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {memoryTypes.map((name) => (
+            <motion.button
+              className="bg-white p-[3px] text-[12px] rounded-md border border-black cursor-pointer hover:bg-gray-200 transition-colors duration-300"
+              variants={buttonVariants}
+              whileHover="hover"
+              key={name}
+              disabled={memoryFilter}
+              onClick={() => {
+
+                handleapplyFilter({type: "memory" , value: name})
               }}
             >
               {name}

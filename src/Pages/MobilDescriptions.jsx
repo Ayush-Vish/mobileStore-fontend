@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../Helpers/axios';
 import { motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../Redux/slices/mobile.slice';
 
 function MobileDescriptions() {
   const [data, setData] = useState({});
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate( );
 
   const getData = async () => {
     const response = await axiosInstance.get(`api/mobiles/${id}`);
     setData(response.data.data.mobile);
   };
-
+  const handlAddToCart = async ( ) => {
+    const response =await dispatch(addToCart({id}));
+    console.log(response);
+    if(response.payload.status) {
+      navigate("/cart")
+    }
+  }
   useEffect(() => {
     getData();
   }, []);
@@ -42,7 +52,7 @@ function MobileDescriptions() {
             <p className='text-lg text-gray-700'>{data.memory} GB Memory</p>
             <p className='text-lg text-gray-700'>{data.type}</p>
             <p className='text-lg text-gray-700'>{data.OS}</p>
-            <button className='mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 w-full'>
+            <button  onClick={handlAddToCart} className='mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 w-full'>
               Add to Cart
             </button>
           </div>
