@@ -3,9 +3,10 @@ import { CiSearch, CiShoppingCart } from "react-icons/ci";
 import useDebounce from '../hooks/useDebounce';
 import { useDispatch } from 'react-redux';
 import { searchMobiles } from '../Redux/slices/mobile.slice';
+import { useNavigate } from 'react-router-dom';
 const Header = () => {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const [search , setSearch]  =useState("");
     const deBouncedCallback = useDebounce(( e => setSearch(e.target.value)));
     const handleApiCall = async() => {
@@ -31,15 +32,10 @@ const Header = () => {
 
             
             <div className='flex  gap-3'>
-                <div>
-                    Home
-                </div>
-                <div>
-                    Phones
-                </div>
                 
-                <div className='text-2xl'>
-                    <CiShoppingCart/>   
+                
+                <div onClick={()=> navigate("/cart")} className='text-2xl cursor-pointer    '>
+                    <  CiShoppingCart/>   
                 </div>
             </div>
            </div>

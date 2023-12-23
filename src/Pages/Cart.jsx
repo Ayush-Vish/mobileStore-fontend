@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart } from "../Redux/slices/mobile.slice";
+import { getCart, removeFromCart } from "../Redux/slices/mobile.slice";
 
 function Cart() {
   const cart = useSelector((state) => state.mobile.cart);
@@ -8,7 +8,14 @@ function Cart() {
   const total = cart.reduce((sum, item) => sum + item?.price, 0);
   const handleRemoveFromCart=  async (id) =>  {
     await dispatch(removeFromCart({id}));
+  } 
+  const handleApi = async () => {
+    await dispatch(getCart());
   }
+  useEffect(()=> {
+    handleApi();
+
+  }, [ ])
   return (
     <div className="max-w-[65rem] m-auto p-4 bg-white shadow-md rounded-md">
       <h1 className="text-3xl font-bold text-center mb-4 animate-pulse">Shopping Cart</h1>

@@ -4,10 +4,11 @@ Welcome to the Mobile Store App, your one-stop solution for browsing and purchas
 
 ## Features
 
-- Browse through a wide variety of mobiles.
+- Implemented dynamic filters like price , Brand, Processor ,Operating System and Memory.
 - Detailed descriptions and specifications for each mobile.
-- Filter and sort mobiles based on brand, price, and other specifications.
-- Add mobiles to your cart and purchase them securely.
+- Add mobiles to your cart and remove them. 
+- Implemented Debouncing for Reduced API calls.
+- The filters are not hard coded so that any Mobile with new Configuration can be added.  
 
 ## Installation
 
@@ -15,7 +16,7 @@ Clone this repository and install the dependencies:
 
 ```bash
     git https://github.com/Ayush-Vish/mobileStore-frontend.git
-    cd mobile-store-app
+    cd mobileStore-frontend
     npm install 
 
 ```

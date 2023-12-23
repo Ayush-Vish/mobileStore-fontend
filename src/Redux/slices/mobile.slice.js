@@ -121,6 +121,21 @@ export const removeFromCart = createAsyncThunk(
   }
 );
 
+
+export const getCart = createAsyncThunk("mobile/getCart", async () => {
+    try {
+        const res = axiosInstance.get(`/api/cart`);
+        toast.promise(res, {
+            loading: "Loading",
+            success: "Loaded",
+            error: "Something went wrong",
+        });
+        return (await res).data;
+    } catch (error) {
+        toast.error(error.message);
+    }
+});
+
 const mobileSlice = createSlice({
   name: "mobile",
   initialState,
@@ -185,7 +200,13 @@ const mobileSlice = createSlice({
       .addCase(removeFromCart.fulfilled, (state, action) => {
         console.log(action);
         state.cart = action.payload.data.cart;
-      });
+      })
+        .addCase(getCart.fulfilled, (state, action) => {
+            console.log(action);
+            state.cart = action.payload.data.cart;
+        });
+
+      
   },
 });
 

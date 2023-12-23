@@ -6,7 +6,7 @@ function MobileCard({ name, image, processor, memory, type,OS, price  , id }) {
   const navigate = useNavigate();
 
   return (
-    <div onClick={ ()=> navigate(`/description/${id}` )} className="flex flex-col sm:flex-row border-2 rounded-lg overflow-hidden shadow-lg m-4  p-2">
+    <div onClick={ ()=> navigate(`/description/${id}` )} className="flex cursor-pointer flex-col sm:flex-row border-2 rounded-lg overflow-hidden shadow-lg m-4  p-2">
       <div
         className="sm:w-1/2 h-64 sm:h-auto flex items-center justify-center  "
         onClick={() => setIndex(!index)}
