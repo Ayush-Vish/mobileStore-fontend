@@ -9,6 +9,7 @@ Welcome to the Mobile Store App, your one-stop solution for browsing and purchas
 - Add mobiles to your cart and remove them. 
 - Implemented Debouncing for Reduced API calls.
 - The filters are not hard coded so that any Mobile with new Configuration can be added.  
+- Implemented Skeleton loading.
 
 ## Installation
 

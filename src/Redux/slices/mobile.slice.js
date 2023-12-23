@@ -17,7 +17,8 @@ const initialState = {
   memoryFilter: null,
   appliedFilters: [],
   filteredMobiles: [],
-  pending : false,
+  pending : false, 
+  pending2: false
 };
 
 export const searchMobiles = createAsyncThunk(
@@ -196,8 +197,12 @@ const mobileSlice = createSlice({
         state.filteredMobiles = action.payload.data.mobiles;
         state.pending = false;
       })
+      .addCase(searchMobiles.pending, (state, action) => {
+        state.pending = true;
+      })
       .addCase(searchMobiles.fulfilled, (state, action) => {
         state.filteredMobiles = action.payload.data.mobiles;
+        state.pending = false;
         
       })
       

@@ -11,7 +11,7 @@ function MobileCard({ name, image, processor, memory, type,OS, price  , id }) {
         className="sm:w-1/2 h-64 sm:h-auto flex items-center justify-center  "
         onClick={() => setIndex(!index)}
       >
-        <img className="h-[100%]" src="https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/3/5/l/-original-imaghx9qmgqsk9s4.jpeg?q=70" alt="" />
+        <img className="h-[100%]" src={image[0]} alt="" />
       </div>
       <div className="sm:w-1/2 p-4 bg-white">
         <h1 className="font-bold text-2xl mb-4">{name}</h1>

@@ -13,7 +13,9 @@ const buttonVariants = {
   },
 };
 
+
 function SideBar() {
+  console.log("sdkjkfvdsfsdfhasj")
   const mobiles = useSelector(state => state?.mobile?.mobiles);
 
 const processors = mobiles 
@@ -46,9 +48,9 @@ const memoryTypes = mobiles
   
   const fetchData = useCallback(
     async ( )=> {
-      await dispatch(getMobiles({price: priceFilter , name: brandFilter , processor: processorFilter , OS : oSFilter})) 
+      await dispatch(getMobiles({price: priceFilter , name: brandFilter , processor: processorFilter , OS : oSFilter , memory: memoryFilter})) 
 
-    } , [brandFilter, dispatch, priceFilter, processorFilter, oSFilter]
+    } , [brandFilter, dispatch, priceFilter, processorFilter, oSFilter , memoryFilter]
   )
 
   useEffect(() => {
