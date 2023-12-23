@@ -20,6 +20,17 @@ const initialState = {
 
 }
 
+export const searchMobiles = createAsyncThunk("mobile/searchMobiles",async ( value) => {
+    try {
+        const res = await axiosInstance.get(`/api/mobiles/search?search=${value}`);
+        return (await res).data;
+
+    } catch (error) {
+        console.log(error.message);
+
+    }
+} )
+
 export const getMobiles = createAsyncThunk("mobile/getMobiles", async ( { name, type, processor, memory, OS, price}) => {
     try {
         let queryParams= "";
@@ -99,6 +110,8 @@ const mobileSlice = createSlice({
 
         builder.addCase(
             getAllMobiles.fulfilled, (state, action) => {
+                console.log(action);
+
                 state.mobiles = action.payload.data.mobiles;
 
             }
@@ -106,6 +119,10 @@ const mobileSlice = createSlice({
         )
         .addCase(getMobiles.fulfilled , (state , action ) => { 
             state.filteredMobiles=action.payload.data.mobiles;
+        })
+        .addCase(searchMobiles.fulfilled , (state , action ) => {
+            console.log(action);
+            state.filteredMobiles=action.payload;
         })
      
 

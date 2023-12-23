@@ -22,7 +22,7 @@ function MobileGallery() {
       {
         ( mobileData.filteredMobiles ? mobileData.filteredMobiles :mobileData.mobiles).map((e , idx ) => (
 
-          <MobileCard key={idx} name={e.name} type={e.type} OS={e.OS} processor={e.processor} memory={e.memory} price={e.price} image={e.image}  />
+          <MobileCard id={e._id} key={idx} name={e.name} type={e.type} OS={e.OS} processor={e.processor} memory={e.memory} price={e.price} image={e.image}  />
         ) )
       }
     </section>
