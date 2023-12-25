@@ -7,4 +7,4 @@ function useDebounce (  cb , delay =1000  ) {
         }, delay)
     }
 }
-export default useDebounce
+export default useDebounce;

@@ -183,7 +183,7 @@ const memoryTypes = mobiles
       </div>
       <hr className="w-full" />
       <div className="flex flex-col items-center w-full px-4">
-        <h1 className="font-bold text-lg mb-2">Operating System</h1>
+        <h1 className="font-bold text-lg mb-2"> Memory </h1>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {memoryTypes.map((name) => (
             <motion.button
